@@ -1,7 +1,7 @@
 from rest_framework import permissions, viewsets
 
 from django.contrib.auth.models import User
-from .models import Cryptocurrency
+from webapp.models import Cryptocurrency
 from .serializers import UserSerializer, CryptocurrencySerializer
 from .mixins import MultipleFieldLookupMixin
 

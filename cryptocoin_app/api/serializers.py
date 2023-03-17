@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import Cryptocurrency
+from webapp.models import Cryptocurrency
 from rest_framework import serializers
 
 

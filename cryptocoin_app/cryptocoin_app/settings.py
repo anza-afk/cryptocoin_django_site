@@ -117,9 +117,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+STATIC_ROOT = ''
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = ('static',)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -129,3 +129,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+
+LOGIN_REDIRECT_URL = '/'
+
+COINMARCETCAP_API_KEY = '46177aad-2317-4569-8f01-9fd2abc64a16'
+PRO_API_URL = 'pro-api.coinmarketcap.com'
+MOCK_API_KEY = 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c'
+MOCK_API_URL = 'sandbox-api.coinmarketcap.com'
+NEWSAPI_KEY = '6b2b06d873e1480f81b247d085baeed4'
