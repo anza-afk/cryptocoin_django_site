@@ -1,0 +1,48 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="'container"></div>
+  <div class="col-md-10">
+    <div class="card mb-10 shadow-sm">
+      <div class="card-body">
+        <p class="card-text"><h5>{{ crypto.name }}</h5> <h4>{{ crypto.symbol }}</h4></p>
+        <p class="card-text"><h6>Price: {{ crypto.price }} USD</h6></p>
+        <p class="card-text">Price change for the last 24H: <b>{{ crypto.percent_change_24h }}</b></p>
+        <p class="card-text">Price change for the last 7D: <b>{{ crypto.percent_change_7d }}</b></p>
+        <p class="card-text">Volume change for the last 24H: <b>{{ crypto.volume_24h }}</b></p>
+        <p class="card-text">circulating supply: <b>{{ crypto.circulating_supply }}</b></p>
+        {% if user in crypto.favorite_by.all %}
+        <a name="{{ crypto.id }}" style="font-size:48px;color: gold;" class="favorite" id="co"><i class="fa fa-star" aria-hidden="true"></i></a>
+        {% else %}
+        <a name="{{ crypto.id }}" style="font-size:48px;color: black;" class="favorite" id="co"><i class="fa fa-star" aria-hidden="true"></i></a>
+        {% endif %}
+        <div class="d-flex justify-content-between align-items-center">
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $('.favorite').click(function(){
+      $.ajax({
+                type: "POST",
+                url: "{% url 'favorite' %}",
+                data: {'crypto_id': $(this).attr('name'),'operation':'add_fav','csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success: function(response) {
+                selector = document.getElementsByName(response.crypto_id);
+                      if(response.fav==true){
+                        $(selector).css("color","gold");
+                      }
+                      else if(response.fav==false){
+                        $(selector).css("color","black");
+                      }
+  
+  
+                }
+  
+          });
+  
+    })
+  </script>
+{% endblock %}

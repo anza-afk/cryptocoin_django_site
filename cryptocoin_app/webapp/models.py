@@ -7,8 +7,8 @@ class Cryptocurrency(models.Model):
     symbol = models.CharField(max_length=10)
     price = models.FloatField()
     percent_change_24h = models.FloatField()
+    percent_change_7d = models.FloatField()
     volume_24h = models.FloatField()
-    volume_7d = models.FloatField()
     circulating_supply = models.IntegerField()
 
     favorite_by = models.ManyToManyField(
@@ -19,3 +19,9 @@ class Cryptocurrency(models.Model):
     class Meta: 
         verbose_name = "Cryptocurrency"
         verbose_name_plural = "Cryptocurrencies"
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f'{self.name} {self.symbol}'

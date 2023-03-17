@@ -1,0 +1,97 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <ul class="navbar-nav mr-auto">
+      {% if page_obj.has_previous %}
+        <div class="nav-item">
+          <a class="nav-link" href="?page=1">&laquo; first</a>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+        </div>
+      {% endif %}
+        <div class="nav-link active">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</div>
+      {% if page_obj.has_next %}
+        <div class="nav-item">
+          <a class="nav-link" href="?page={{ page_obj.next_page_number }}">next</a>
+        </div>
+          <div class="nav-item">
+          <a class="nav-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        </div>
+            
+      {% endif %}
+  </ul>
+</nav>
+  
+  {% for crypto in page_obj %}
+  <div class="'container"></div>
+  <div class="col-md-10">
+    <div class="card mb-10 shadow-sm">
+      <div class="card-body">
+         
+        <p class="card-text"><h5>{{ crypto.name }} {{ crypto.symbol }}</h5><h6>Price: {{ crypto.price }} USD</h6></p>
+        <p class="card-text">Price change for the last 24H: <b>{{ crypto.percent_change_24h }}</b>; Price change for the last 7D: <b>{{ crypto.percent_change_7d }}</b>; Volume change for the last 24H: <b>{{ crypto.volume_24h }}</b>; circulating supply: <b>{{ crypto.circulating_supply }}</b></p>
+        
+        {% if user in crypto.favorite_by.all %}
+
+        <a name="{{ crypto.id }}" style="font-size:48px;color: gold;" class="favorite" id="co"><i class="fa fa-star" aria-hidden="true"></i></a>
+        {% else %}
+
+        <a name="{{ crypto.id }}" style="font-size:48px;color: black;" class="favorite" id="co"><i class="fa fa-star" aria-hidden="true"></i></a>
+        {% endif %}
+        <div class="d-flex justify-content-between align-items-center">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <ul class="navbar-nav mr-auto">
+        {% if page_obj.has_previous %}
+          <div class="nav-item">
+            <a class="nav-link" href="?page=1">&laquo; first</a>
+          </div>
+          <div class="nav-item">
+            <a class="nav-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+          </div>
+        {% endif %}
+          <div class="nav-link active">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</div>
+        {% if page_obj.has_next %}
+          <div class="nav-item">
+            <a class="nav-link" href="?page={{ page_obj.next_page_number }}">next</a>
+          </div>
+            <div class="nav-item">
+            <a class="nav-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          </div>
+              
+        {% endif %}
+    </ul>
+  </nav>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $('.favorite').click(function(){
+      $.ajax({
+                type: "POST",
+                url: "{% url 'favorite' %}",
+                data: {'crypto_id': $(this).attr('name'),'operation':'add_fav','csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success: function(response) {
+                selector = document.getElementsByName(response.crypto_id);
+                      if(response.fav==true){
+                        $(selector).css("color","gold");
+                      }
+                      else if(response.fav==false){
+                        $(selector).css("color","black");
+                      }
+  
+  
+                }
+  
+          });
+  
+    })
+  </script>
+{% endblock %}

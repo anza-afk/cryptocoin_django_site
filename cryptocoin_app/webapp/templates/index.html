@@ -6,7 +6,7 @@
   <div class="'container"></div>
   <div class="col-md-10">
     <div class="card mb-10 shadow-sm">
-      <img class="card-img-top" style="max-width: 50%; max-height: 50%; display: block;" src={{ article.urlToImage }} data-holder-rendered="true">
+      <img class="card-img-top" alt="" style="max-width: 50%; max-height: 50%; display: block;" src={{ article.urlToImage }} onerror="this.onerror=null; this.remove();" data-holder-rendered="true">
       <div class="card-body">
         <p class="card-text"><h2>{{ article.title }}</h2></p>
         <p class="card-text"><h4>By: {{ article.author }}</h2></p>

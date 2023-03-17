@@ -3,12 +3,38 @@ import requests
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from datetime import date, timedelta
+from .models import Cryptocurrency
+from django.db.models import QuerySet
+from django.core.paginator import Paginator
 
 
-def get_all_crypto(api_key: str, limit: int=200) -> list[dict]:
+def get_paginated_query(request, crypto_data):
+    paginator = Paginator(crypto_data, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
+
+
+def put_data_to_db(crypto_clean_data: list[dict]) -> None:
+    for currency in crypto_clean_data:
+        db_currency, created = Cryptocurrency.objects.update_or_create(
+        name = currency['name'], defaults=currency)
+
+
+def get_clean_data(crypto_data: list[dict]) -> list[dict]:
+    model_fields = ('name', 'symbol', 'circulating_supply')
+    price_fields = ('price', 'percent_change_24h', 'volume_24h', 'percent_change_7d')
+    for currency in crypto_data:
+        crypto_clean_data = {key: currency[key] for key in model_fields}
+        price_dict = {key: currency['quote']['USD'][key] for key in price_fields}
+        crypto_clean_data.update(price_dict)
+        return crypto_clean_data
+
+
+def get_crypto_from_api(api_key: str, limit: int=200) -> list[dict]:
     url = ('https://pro-api.coinmarketcap.com/'
         'v1/cryptocurrency/listings/'
-        f'latest?start=1&{limit}&convert=USD')
+        f'latest?start=1&limit={limit}&convert=USD')
 
     headers = {
         'Accepts': 'application/json',
@@ -22,9 +48,6 @@ def get_all_crypto(api_key: str, limit: int=200) -> list[dict]:
         response = session.get(url)
         data = json.loads(response.text)
         res = [item for item in data['data']]
-        # with open('listings-latest-test2.txt', 'w', encoding="UTF-8") as file:
-        #     for item in data['data']:
-        #         file.write(f'{item}\n')
         return res
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
@@ -45,3 +68,4 @@ def get_crypto_news(api_key: str) -> list[dict]:
         return res
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
+
