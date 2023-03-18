@@ -66,7 +66,7 @@ def refresh_data(request):
     """View for refreshing data from coinmarketcap API"""
     # refresh data and limit param due to coinmarketcap restriction per day
     api_data = utils.get_clean_data(
-        utils.get_crypto_from_api(COINMARCETCAP_API_KEY, limit=API_LIMIT))
+        utils.get_crypto_from_api(COINMARKET_API_KEY, limit=API_LIMIT))
     utils.put_data_to_db(api_data)
     return (redirect(to="crypto"))
 
