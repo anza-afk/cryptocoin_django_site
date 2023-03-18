@@ -10,28 +10,32 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR.parent, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1^df*e^)+8yflhez16^--6^alnohx%a99x5c!h_m@9e+&)c)y@'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -78,9 +82,13 @@ WSGI_APPLICATION = 'cryptocoin_app.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
 
@@ -118,8 +126,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
 STATIC_ROOT = ''
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 # STATICFILES_DIRS = ('static',)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -131,11 +142,19 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+LOGIN_REDIRECT_URL = 'index'
 
-LOGIN_REDIRECT_URL = '/'
+COINMARKET_API_KEY = env('COINMARCETCAP_API_KEY')
+PRO_API_URL = env('PRO_API_URL')
+NEWSAPI_KEY = env('NEWSAPI_KEY')
 
-COINMARCETCAP_API_KEY = '46177aad-2317-4569-8f01-9fd2abc64a16'
-PRO_API_URL = 'pro-api.coinmarketcap.com'
-MOCK_API_KEY = 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c'
-MOCK_API_URL = 'sandbox-api.coinmarketcap.com'
-NEWSAPI_KEY = '6b2b06d873e1480f81b247d085baeed4'
+CSRF_TRUSTED_ORIGINS = [
+    "https://*localhost:1337",
+    "http://*localhost:1337",
+    "https://*127.0.0.1:1337",
+    "http://*127.0.0.1:1337",
+    f"http://*{env('DOMAIN_URL')}",
+    f"https://*{env('DOMAIN_URL')}",
+    ]
+
+API_LIMIT = env('API_LIMIT')

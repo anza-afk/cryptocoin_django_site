@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    command: gunicorn cryptocoin_app.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./cryptocoin_app/:/usr/src/cryptocoin_app/
+      - static:/usr/src/cryptocoin_app/static
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD} 
+      - POSTGRES_DB=${SQL_DATABASE}
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/usr/src/cryptocoin_app/webapp/static
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static:

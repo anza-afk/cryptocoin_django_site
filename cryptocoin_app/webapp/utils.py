@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 
 
 def get_paginated_query(request, crypto_data):
+    """Paginate function for list of al lcryptocurrencies"""
     paginator = Paginator(crypto_data, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -15,6 +16,7 @@ def get_paginated_query(request, crypto_data):
 
 
 def put_data_to_db(crypto_clean_data: list[dict]) -> None:
+    """Function that puts cryptocurrency data to db"""
     for currency in crypto_clean_data:
         db_currency, created = Cryptocurrency.objects.update_or_create(
             name=currency['name'],
@@ -23,6 +25,7 @@ def put_data_to_db(crypto_clean_data: list[dict]) -> None:
 
 
 def get_clean_data(crypto_data: list[dict]) -> list[dict]:
+    """Function that cleans cryptocurrency data"""
     model_data = (
         'name',
         'symbol',
@@ -44,6 +47,7 @@ def get_clean_data(crypto_data: list[dict]) -> list[dict]:
 
 
 def get_crypto_from_api(api_key: str, limit: int = 200) -> list[dict]:
+    """Function that returns all cryptocurrency from Coinmarketcap API"""
     url = (
         'https://pro-api.coinmarketcap.com/'
         'v1/cryptocurrency/listings/'
@@ -69,6 +73,7 @@ def get_crypto_from_api(api_key: str, limit: int = 200) -> list[dict]:
 
 
 def get_crypto_news(api_key: str) -> list[dict]:
+    """Function that returns cryptocurrency news from NewsAPI"""
     today = date.today()
     yesterday = today - timedelta(days=1)
     url = (

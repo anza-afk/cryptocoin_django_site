@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import TemplateView
 
-from cryptocoin_app.settings import NEWSAPI_KEY, COINMARCETCAP_API_KEY
+from cryptocoin_app.settings import NEWSAPI_KEY, COINMARKET_API_KEY, API_LIMIT
 from .models import Cryptocurrency
 import json
 from . import utils
@@ -25,7 +25,7 @@ class IndexView(TemplateView):
 
 
 class CryptoView(TemplateView):
-    """View function for home page of site."""
+    """View function for list od all cryptocurrency."""
     crypto_data = Cryptocurrency.objects.all()
     template_name = 'crypto_list.html'
 
@@ -40,7 +40,7 @@ class CryptoView(TemplateView):
 
 
 class CryptoDetailView(TemplateView):
-    """View function for home page of site."""
+    """View function for detail view of one cryptocurrency."""
     template_name = 'crypto_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -63,20 +63,22 @@ class CryptoDetailView(TemplateView):
 
 
 def refresh_data(request):
+    """View for refreshing data from coinmarketcap API"""
     # refresh data and limit param due to coinmarketcap restriction per day
     api_data = utils.get_clean_data(
-        utils.get_crypto_from_api(COINMARCETCAP_API_KEY, limit=400))
+        utils.get_crypto_from_api(COINMARCETCAP_API_KEY, limit=API_LIMIT))
     utils.put_data_to_db(api_data)
     return (redirect(to="crypto"))
 
 
 def register(request):
+    """View for registration form"""
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(
-                request, "Registration successful. Thou may now enter."
+                request, "Registration successful. You can login now."
             )
             return redirect("login")
         messages.error(
@@ -93,6 +95,7 @@ def register(request):
 
 
 def favorite_button(request):
+    """View hook for AJAX method for add crypto to favorites"""
     if request.method == "POST":
         if request.POST.get("operation") == "add_fav" \
              and request.headers.get('x-requested-with') == 'XMLHttpRequest':

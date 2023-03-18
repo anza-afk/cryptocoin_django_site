@@ -9,11 +9,12 @@ class Cryptocurrency(models.Model):
     percent_change_24h = models.FloatField()
     percent_change_7d = models.FloatField()
     volume_24h = models.FloatField()
-    circulating_supply = models.IntegerField()
+    circulating_supply = models.BigIntegerField()
 
     favorite_by = models.ManyToManyField(
         get_user_model(),
-        related_name='favorites'
+        related_name='favorites',
+        blank=True
     )
 
     class Meta:
