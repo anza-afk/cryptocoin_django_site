@@ -21,13 +21,19 @@ ____
 ____ 
 ### API:
 
-    endpoint /api/v1 ведёт в корень API (API root)</br>
-    endpoint /api/v1/cryptocurrencies/ ведёт на список всех криптовалют</br>
-    endpoint /api/v1/cryptocurrencies/<name>, endpoint /cryptocurrencies/<symbol> и endpoint /cryptocurrencies/<id> ведут на конеретную криптовалюту, если таковая найдётся</br>
-(поиск сразу по 3 полям)</br>
-    endpoint /api/v1/users/ ведёт на список всех пользователей</br>
-    endpoint /api/v1/users/<pk> ведёт на конкретного пользователя</br>
+    endpoint /api/v1 ведёт в корень API (API root)  
+
+    endpoint /api/v1/cryptocurrencies/ ведёт на список всех криптовалют  
+
+    endpoint /api/v1/cryptocurrencies/<name>, endpoint /cryptocurrencies/<symbol> и endpoint /cryptocurrencies/<id>  
     
+    ведут на конеретную криптовалюту, если таковая найдётся (поиск сразу по 3 полям)  
+
+    endpoint /api/v1/users/ ведёт на список всех пользователей  
+
+    endpoint /api/v1/users/<pk> ведёт на конкретного пользователя  
+
+
 Для наглядности в API не выключен JSONRenderer, чтобы было проще проверить всё.
 
 ____
