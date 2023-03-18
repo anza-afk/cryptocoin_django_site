@@ -24,5 +24,5 @@ class CryptocurrencyViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     """
     queryset = Cryptocurrency.objects.all()
     serializer_class = CryptocurrencySerializer
-    lookup_fields = ('symbol', 'name')
+    lookup_fields = ('symbol', 'name', 'id')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
