@@ -1,11 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-
-  {% for article in news %}
-  <div class="'container"></div>
-  <div class="col-md-10">
-    <div class="card mb-10 shadow-sm">
+<div class="container-fluid">
+  <div class="row">
+  <div class="col-md-8">
+    <h3>Latest Crypto News:</h3>
+    {% for article in news %}
+    <div class="card mb-8 shadow-sm">
       <img class="card-img-top" alt="" style="max-width: 50%; max-height: 50%; display: block;" src={{ article.urlToImage }} onerror="this.onerror=null; this.remove();" data-holder-rendered="true">
       <div class="card-body">
         <p class="card-text"><h2>{{ article.title }}</h2></p>
@@ -18,7 +19,33 @@
         </div>
       </div>
     </div>
+      {% endfor %}
+</div>
+  <div class="col-md-4">
+    {% if user.is_authenticated %}
+    <h3>Your favorites:</h3>
+    {% for crypto in favorites %}
+    <div class="'container"></div>
+  <div class="col-md-10">
+    <div class="card mb-10 shadow-sm">
+      <div class="card-body">
+        <p class="card-text"><h5>{{ crypto.name }} {{ crypto.symbol }}</h5><h6>Price: {{ crypto.price }} USD</h6></p>
+        <p class="card-text">Price change for the last 24H: <b>{{ crypto.percent_change_24h }}</b>; Price change for the last 7D: <b>{{ crypto.percent_change_7d }}</b>; Volume change for the last 24H: <b>{{ crypto.volume_24h }}</b>; circulating supply: <b>{{ crypto.circulating_supply }}</b></p>
+            {% if user in crypto.favorite_by.all %}
+              <a name="{{ crypto.id }}" style="font-size:48px;color: gold;" class="favorite" id="co"><i class="fa fa-star" aria-hidden="true"></i></a>
+            {% else %}
+              <a name="{{ crypto.id }}" style="font-size:48px;color: black;" class="favorite" id="co"><i class="fa fa-star" aria-hidden="true"></i></a>
+            {% endif %}
+          <div class="d-flex justify-content-between align-items-center"></div>
+      </div>
+    </div>
+    
   </div>
-  {% endfor %}
-
+    {% endfor %}
+    {% else %}
+            <p class="card-text"><h3>Register and login to add to favorites.</h3></p>
+            <p class="card-text"><h4>After authentication favorites will be visible here.</h4></p>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

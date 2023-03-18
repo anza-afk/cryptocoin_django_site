@@ -5,6 +5,7 @@ from webapp.models import Cryptocurrency
 from .serializers import UserSerializer, CryptocurrencySerializer
 from .mixins import MultipleFieldLookupMixin
 
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that returns list of all users
@@ -25,4 +26,3 @@ class CryptocurrencyViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     serializer_class = CryptocurrencySerializer
     lookup_fields = ('symbol', 'name')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-

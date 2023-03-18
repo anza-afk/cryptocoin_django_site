@@ -1,6 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <p>Logged out!</p>
-  <a href="{% url 'login'%}">Click here to login again.</a>
+<div class="container-fluid">
+  <p>Logged out! You will be redirecten in 3 seconds...</p>
+  <a href="{% url 'login'%}">Or click here to login again.</a>
+  <meta http-equiv = "refresh" content = "3; url = {% url 'index'%}">
+</div>
 {% endblock %}

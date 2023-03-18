@@ -1,6 +1,6 @@
 from django.db import models
-
 from django.contrib.auth import get_user_model
+
 
 class Cryptocurrency(models.Model):
     name = models.CharField(max_length=100)
@@ -16,7 +16,7 @@ class Cryptocurrency(models.Model):
         related_name='favorites'
     )
 
-    class Meta: 
+    class Meta:
         verbose_name = "Cryptocurrency"
         verbose_name_plural = "Cryptocurrencies"
 
