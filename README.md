@@ -26,7 +26,8 @@ ____
     endpoint /api/v1 ведёт в корень API (API root)  
     endpoint /api/v1/cryptocurrencies/ ведёт на список всех криптовалют  
     endpoint'ы /api/v1/cryptocurrencies/<name>, /api/v1/cryptocurrencies/<symbol>  
-    и /api/v1/cryptocurrencies/<id> ведут на конеретную криптовалюту, если таковая найдётся (поиск по 3 полям)  
+    и /api/v1/cryptocurrencies/<id> ведут на конеретную криптовалюту,  
+    если таковая найдётся (поиск по 3 полям)  
     endpoint /api/v1/users/ ведёт на список всех пользователей  
     endpoint /api/v1/users/<pk> ведёт на конкретного пользователя  
 
